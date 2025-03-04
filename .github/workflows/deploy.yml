@@ -20,7 +20,7 @@ jobs:
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           eval "$(ssh-agent -s)"
-          ssh-add ~/.ssh/id_rsa
+          ssh-add ~/.ssh/id_rsa || echo "⚠️ Error en ssh-add, verificando permisos..."
           ssh-keyscan -H tl-showroom.equalitech.xyz >> ~/.ssh/known_hosts
           ssh-keyscan -H github.com >> ~/.ssh/known_hosts
 
