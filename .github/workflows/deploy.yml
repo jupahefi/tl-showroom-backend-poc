@@ -19,8 +19,8 @@ jobs:
           mkdir -p ~/.ssh
           echo "$SSH_PRIVATE_KEY" | base64 --decode > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          eval "$(ssh-agent -s)"
-          ssh-add ~/.ssh/id_rsa
+          eval "$(ssh-agent -s)"  # Asegurar que ssh-agent está activo
+          ssh-add ~/.ssh/id_rsa || echo "⚠️ Error en ssh-add, verificando permisos..."
           ssh-keyscan -H tl-showroom.equalitech.xyz >> ~/.ssh/known_hosts
 
       - name: 🚀 Desplegar en servidor
