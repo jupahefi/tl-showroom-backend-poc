@@ -1,4 +1,4 @@
-name: Deploy Application
+name: 🚀 Deploy to Server
 
 on:
   push:
@@ -10,20 +10,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout código
+      - name: 📥 Checkout del código
         uses: actions/checkout@v3
 
-      - name: Configurar SSH
+      - name: 🔑 Configurar acceso SSH
         run: |
-          echo "$SSH_PRIVATE_KEY" > private_key
-          chmod 600 private_key
           mkdir -p ~/.ssh
-          mv private_key ~/.ssh/id_rsa
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H tl-showroom.equalitech.xyz >> ~/.ssh/known_hosts
 
-      - name: Deploy en servidor
+      - name: 🚀 Desplegar en servidor
         run: |
-          ssh -i ~/.ssh/id_rsa root@tl-showroom.equalitech.xyz << 'EOF'
-          cd /opt/easyengine/sites/tl-showroom.equalitech.xyz/app/backend
-          git pull origin main
-          docker-compose up -d --build
-          EOF
+          ssh root@tl-showroom.equalitech.xyz "bash /opt/easyengine/sites/tl-showroom.equalitech.xyz/app/backend/deploy.sh"
