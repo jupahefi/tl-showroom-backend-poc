@@ -1,0 +1,26 @@
+version: "3.8"
+services:
+  api:
+    build: .
+    container_name: showroom-api
+    restart: always
+    depends_on:
+      - postgres
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://showroom_user:🔑 Ingresa contraseña de la base de datos (oculto, presiona Enter para usar el valor por defecto)@postgres:5432/showroom_db
+  postgres:
+    image: postgres:16
+    container_name: showroom-db
+    restart: always
+    environment:
+      POSTGRES_USER: showroom_user
+      POSTGRES_PASSWORD: 🔑 Ingresa contraseña de la base de datos (oculto, presiona Enter para usar el valor por defecto)
+      POSTGRES_DB: showroom_db
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+volumes:
+  pgdata:
