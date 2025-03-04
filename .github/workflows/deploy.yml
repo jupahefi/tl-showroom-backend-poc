@@ -17,9 +17,11 @@ jobs:
       - name: 🔑 Configurar acceso SSH
         run: |
           mkdir -p ~/.ssh
-          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          echo "" | base64 --decode > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          eval "$(ssh-agent -s)"
+          eval "SSH_AUTH_SOCK=/tmp/ssh-XXXXXX0H2Fav/agent.1099052; export SSH_AUTH_SOCK;
+SSH_AGENT_PID=1099053; export SSH_AGENT_PID;
+echo Agent pid 1099053;"
           ssh-add ~/.ssh/id_rsa || echo "⚠️ Error en ssh-add, verificando permisos..."
           ssh-keyscan -H tl-showroom.equalitech.xyz >> ~/.ssh/known_hosts
           ssh-keyscan -H github.com >> ~/.ssh/known_hosts
