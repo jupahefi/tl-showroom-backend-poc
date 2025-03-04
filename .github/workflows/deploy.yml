@@ -1,4 +1,4 @@
-name: Deploy tl-showroom-backend-poc
+name: Deploy Application
 
 on:
   push:
@@ -11,11 +11,19 @@ jobs:
 
     steps:
       - name: Checkout código
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
-      - name: Desplegar en el servidor
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: Configurar SSH
         run: |
-          echo "$SSH_PRIVATE_KEY" > private_key && chmod 600 private_key
-          ssh -o StrictHostKeyChecking=no -i private_key usuario@tu-servidor "cd /opt/easyengine/sites/tl-showroom.equalitech.xyz/app/backend && git pull origin main && ./deploy.sh"
+          echo "$SSH_PRIVATE_KEY" > private_key
+          chmod 600 private_key
+          mkdir -p ~/.ssh
+          mv private_key ~/.ssh/id_rsa
+
+      - name: Deploy en servidor
+        run: |
+          ssh -i ~/.ssh/id_rsa root@tl-showroom.equalitech.xyz << 'EOF'
+          cd /opt/easyengine/sites/tl-showroom.equalitech.xyz/app/backend
+          git pull origin main
+          docker-compose up -d --build
+          EOF
