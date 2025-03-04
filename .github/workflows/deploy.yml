@@ -1,0 +1,21 @@
+name: Deploy tl-showroom-backend-poc
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Desplegar en el servidor
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          echo "$SSH_PRIVATE_KEY" > private_key && chmod 600 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key usuario@tu-servidor "cd /opt/easyengine/sites/tl-showroom.equalitech.xyz/app/backend && git pull origin main && ./deploy.sh"
