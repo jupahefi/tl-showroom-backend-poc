@@ -19,8 +19,14 @@ jobs:
           mkdir -p ~/.ssh
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/id_rsa
           ssh-keyscan -H tl-showroom.equalitech.xyz >> ~/.ssh/known_hosts
 
       - name: 🚀 Desplegar en servidor
         run: |
-          ssh root@tl-showroom.equalitech.xyz "cd /opt/easyengine/sites/tl-showroom.equalitech.xyz/app/backend && git pull origin main && bash deploy.sh"
+          ssh root@tl-showroom.equalitech.xyz << 'EOF'
+          cd /opt/easyengine/sites/tl-showroom.equalitech.xyz/app/backend
+          git pull origin main
+          bash deploy.sh
+          EOF
