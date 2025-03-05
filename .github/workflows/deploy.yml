@@ -14,29 +14,51 @@ jobs:
       - name: 📥 Checkout del código
         uses: actions/checkout@v3
 
-      - name: Configurar SSH
+      - name: 🔍 Configurar SSH en el Runner
         run: |
+          echo "🛠️ Preparando el entorno SSH..."
           mkdir -p ~/.ssh
+
+          # 🛠️ Crear archivos de claves desde GitHub Secrets
           echo "${{ secrets.SSH_PRIVATE_KEY_BACKEND }}" | tr -d '\r' > ~/.ssh/id_rsa
           echo "${{ secrets.SSH_PUBLIC_KEY_BACKEND }}" | tr -d '\r' > ~/.ssh/id_rsa.pub
+          
           chmod 600 ~/.ssh/id_rsa
-          chmod 644 ~/.ssh/id_rsa.pub
-          ssh-keyscan -H equalitech.xyz >> ~/.ssh/known_hosts
-          echo "Host equalitech.xyz\n                User root\n                IdentityFile ~/.ssh/id_rsa\n                IdentitiesOnly yes\n                PubKeyAcceptedAlgorithms +ssh-rsa\n                HostKeyAlgorithms +ssh-rsa\n                StrictHostKeyChecking no" > ~/.ssh/config
-          chmod 600 ~/.ssh/config
-          eval "$(ssh-agent -s)"
-          ssh-keygen -yf ~/.ssh/id_rsa
-          ssh -vT root@equalitech.xyz
-          ssh-add ~/.ssh/id_rsa
+          chmod 644 ~/.ssh/id_rsa.pub  # La pública debe ser 644
 
-          # 🔍 Debugging: Verify if the public key matches
-          echo "🔍 Checking SSH Public Key..."
-          ssh-keygen -lf ~/.ssh/id_rsa.pub
+          # 🛠️ Agregar la IP del servidor a los hosts conocidos
+          ssh-keyscan -H equalitech.xyz >> ~/.ssh/known_hosts
+
+          # 🛠️ Configuración del SSH para forzar el uso de esta clave
+          echo "Host equalitech.xyz
+                User root
+                IdentityFile ~/.ssh/id_rsa
+                IdentitiesOnly yes
+                PubKeyAcceptedAlgorithms +ssh-rsa
+                HostKeyAlgorithms +ssh-rsa
+                StrictHostKeyChecking no" > ~/.ssh/config
+          
+          chmod 600 ~/.ssh/config
+
+          # 🔍 Verificar que la clave privada es válida
+          echo "🔍 Validando clave SSH..."
+          ssh-keygen -lf ~/.ssh/id_rsa.pub || echo "⚠️ Error verificando clave pública"
+
+          # 🚀 Iniciar el agente SSH y cargar la clave privada
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/id_rsa || echo "⚠️ Error al añadir clave a ssh-agent"
+
+          # 🔍 Probar conexión con el servidor
+          echo "🔍 Probando conexión SSH con el servidor..."
+          ssh -vT root@equalitech.xyz || echo "⚠️ Error en conexión SSH"
 
       - name: 🚀 Desplegar en servidor
         run: |
           ssh root@equalitech.xyz << 'EOF'
+            echo "📂 Cambiando al directorio de despliegue: /opt/easyengine/sites/tl-showroom.equalitech.xyz/app/backend"
             cd /opt/easyengine/sites/tl-showroom.equalitech.xyz/app/backend
+            echo "🔄 Haciendo pull de la última versión..."
             git pull origin main
+            echo "🚀 Ejecutando script de despliegue..."
             bash deploy.sh
           EOF
