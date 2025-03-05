@@ -18,22 +18,18 @@ jobs:
         run: |
           echo "🛠️ Preparando el entorno SSH..."
           mkdir -p ~/.ssh
-
-          # 🛠️ Crear archivos de claves desde GitHub Secrets
+          
           echo "${{ secrets.SSH_PRIVATE_KEY_BACKEND }}" | tr -d '\r' > ~/.ssh/id_rsa
           echo "${{ secrets.SSH_PUBLIC_KEY_BACKEND }}" | tr -d '\r' > ~/.ssh/id_rsa.pub
           
           chmod 600 ~/.ssh/id_rsa
           chmod 644 ~/.ssh/id_rsa.pub
 
-          # 🔍 DEBUG: Mostrar contenido de la clave pública
           echo "🔍 Contenido de id_rsa.pub:"
           cat ~/.ssh/id_rsa.pub
 
-          # 🛠️ Agregar la IP del servidor a los hosts conocidos
           ssh-keyscan -H equalitech.xyz >> ~/.ssh/known_hosts
 
-          # 🛠️ Configuración del SSH
           echo "Host equalitech.xyz
                 User root
                 IdentityFile ~/.ssh/id_rsa
@@ -44,7 +40,6 @@ jobs:
           
           chmod 600 ~/.ssh/config
 
-          # 🔍 Verificar claves y conexión SSH
           echo "🔍 Validando clave SSH..."
           ssh-keygen -lf ~/.ssh/id_rsa.pub || echo "⚠️ Error verificando clave pública"
 
