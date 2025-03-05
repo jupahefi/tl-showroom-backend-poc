@@ -25,6 +25,8 @@ jobs:
           echo "Host equalitech.xyz\n                User root\n                IdentityFile ~/.ssh/id_rsa\n                IdentitiesOnly yes\n                PubKeyAcceptedAlgorithms +ssh-rsa\n                HostKeyAlgorithms +ssh-rsa\n                StrictHostKeyChecking no" > ~/.ssh/config
           chmod 600 ~/.ssh/config
           eval "$(ssh-agent -s)"
+          ssh-keygen -yf ~/.ssh/id_rsa
+          ssh -vT root@equalitech.xyz
           ssh-add ~/.ssh/id_rsa
 
           # 🔍 Debugging: Verify if the public key matches
