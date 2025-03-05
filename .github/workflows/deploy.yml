@@ -1,35 +1,17 @@
-name: 🚀 Deploy to Server
+name: Deploy tl-showroom-backend-poc
 
 on:
   push:
     branches:
       - main
-  workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 📥 Checkout del código
-        uses: actions/checkout@v3
+      - name: Checkout código
+        uses: actions/checkout@v4
 
-      - name: 🚀 Desplegar en servidor
-        run: |
-          ssh -v -o StrictHostKeyChecking=no deploy@tl-showroom.equalitech.xyz << 'EOF'
-            mkdir -p /opt/easyengine/sites/tl-showroom.equalitech.xyz/app/backend
-            cd /opt/easyengine/sites/tl-showroom.equalitech.xyz/app/backend
-
-            if [ ! -d ".git" ]; then
-              echo "⚠️ Repo no clonado, clonando ahora..."
-              git clone git@github.com:jupahefi/.git .
-            else
-              echo "📥 Repo ya clonado, actualizando..."
-              git pull origin main
-            fi
-
-            echo "🚀 Ejecutando deploy..."
-            bash deploy.sh
-
-            echo "✅ Despliegue completado!"
-          EOF
+      - name: Desplegar en el servidor
+        run: ssh root@equalitech.xyz "cd /opt/easyengine/sites/tl-showroom.equalitech.xyz/app/backend && git pull origin main && ./deploy.sh"
