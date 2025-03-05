@@ -23,6 +23,9 @@ jobs:
           echo "Host equalitech.xyz
                 User root
                 IdentityFile ~/.ssh/id_rsa
+                IdentitiesOnly yes
+                PubKeyAcceptedAlgorithms +ssh-rsa
+                HostKeyAlgorithms +ssh-rsa
                 StrictHostKeyChecking no" > ~/.ssh/config
           chmod 600 ~/.ssh/config
 
