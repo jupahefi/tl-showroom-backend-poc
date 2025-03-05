@@ -17,8 +17,11 @@ jobs:
       - name: Configurar SSH
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY_BACKEND }}" > ~/.ssh/id_rsa
+          echo "${{ secrets.SSH_PRIVATE_KEY_BACKEND }}" | tr -d '\r' > ~/.ssh/id_rsa
+          echo "${{ secrets.SSH_PUBLIC_KEY_BACKEND }}" | tr -d '\r' > ~/.ssh/id_rsa.pub
           chmod 600 ~/.ssh/id_rsa
+          chmod 644 ~/.ssh/id_rsa.pub  # Ensure public key has correct permissions
+
           ssh-keyscan -H equalitech.xyz >> ~/.ssh/known_hosts
           echo "Host equalitech.xyz
                 User root
@@ -28,6 +31,14 @@ jobs:
                 HostKeyAlgorithms +ssh-rsa
                 StrictHostKeyChecking no" > ~/.ssh/config
           chmod 600 ~/.ssh/config
+          eval "SSH_AUTH_SOCK=/tmp/ssh-XXXXXXCqMsAX/agent.1144047; export SSH_AUTH_SOCK;
+SSH_AGENT_PID=1144048; export SSH_AGENT_PID;
+echo Agent pid 1144048;"
+          ssh-add ~/.ssh/id_rsa
+
+          # 🔍 Debugging: Verify if the public key matches
+          echo "🔍 Checking SSH Public Key..."
+          ssh-keygen -lf ~/.ssh/id_rsa.pub
 
       - name: 🚀 Desplegar en servidor
         run: |
