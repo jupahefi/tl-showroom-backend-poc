@@ -17,7 +17,14 @@ jobs:
       - name: 🚀 Desplegar en servidor
         run: |
           ssh -v -o StrictHostKeyChecking=no root@tl-showroom.equalitech.xyz << 'EOF'
-          cd /opt/easyengine/sites/tl-showroom.equalitech.xyz/app/backend
-          git pull origin main
-          bash deploy.sh
+            mkdir -p /opt/easyengine/sites/tl-showroom.equalitech.xyz/app/backend
+            cd /opt/easyengine/sites/tl-showroom.equalitech.xyz/app/backend
+
+            if [ ! -d ".git" ]; then
+              echo "⚠️ Repo no clonado, clonando ahora..."
+              git clone git@github.com:jupahefi/.git .
+            fi
+
+            git pull origin main
+            bash deploy.sh
           EOF
