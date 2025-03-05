@@ -1,17 +1,33 @@
-name: Deploy tl-showroom-backend-poc
+name: 🚀 Deploy to Server
 
 on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout código
-        uses: actions/checkout@v4
+      - name: 📥 Checkout del código
+        uses: actions/checkout@v3
 
-      - name: Desplegar en el servidor
-        run: ssh root@equalitech.xyz "cd /opt/easyengine/sites/tl-showroom.equalitech.xyz/app/backend && git pull origin main && ./deploy.sh"
+      - name: Configurar SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY_BACKEND }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H equalitech.xyz >> ~/.ssh/known_hosts
+          echo "Host equalitech.xyz
+                User root
+                IdentityFile ~/.ssh/id_rsa
+                StrictHostKeyChecking no" > ~/.ssh/config
+          chmod 600 ~/.ssh/config
+
+      - name: 🚀 Desplegar en servidor
+        run: |
+          cd /opt/easyengine/sites/tl-showroom.equalitech.xyz/app/backend
+          git pull origin main
+          bash deploy.sh
