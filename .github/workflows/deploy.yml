@@ -14,30 +14,9 @@ jobs:
       - name: 📥 Checkout del código
         uses: actions/checkout@v3
 
-      - name: 🔑 Configurar acceso SSH
-        run: |
-          mkdir -p ~/.ssh
-          echo "$SSH_PRIVATE_KEY" > ~/.ssh/github_actions_key
-          chmod 600 ~/.ssh/github_actions_key
-          eval "$(ssh-agent -s)"
-          ssh-add ~/.ssh/github_actions_key || echo "⚠️ Error en ssh-add, verificando permisos..."
-
-          # Asegurar que el host está en known_hosts
-          ssh-keyscan -H tl-showroom.equalitech.xyz >> ~/.ssh/known_hosts
-          ssh-keyscan -H github.com >> ~/.ssh/known_hosts
-
-          # 🔧 Configurar ~/.ssh/config para evitar problemas
-          cat << CONFIG > ~/.ssh/config
-          Host *
-            AddKeysToAgent yes
-            StrictHostKeyChecking no
-            IdentityFile ~/.ssh/github_actions_key
-          CONFIG
-          chmod 600 ~/.ssh/config
-
       - name: 🚀 Desplegar en servidor
         run: |
-          ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/github_actions_key root@tl-showroom.equalitech.xyz << 'EOF'
+          ssh -v -o StrictHostKeyChecking=no root@tl-showroom.equalitech.xyz << 'EOF'
           cd /opt/easyengine/sites/tl-showroom.equalitech.xyz/app/backend
           git pull origin main
           bash deploy.sh
