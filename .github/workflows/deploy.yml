@@ -28,6 +28,8 @@ jobs:
 
       - name: 🚀 Desplegar en servidor
         run: |
-          cd /opt/easyengine/sites/tl-showroom.equalitech.xyz/app/backend
-          git pull origin main
-          bash deploy.sh
+          ssh root@equalitech.xyz << 'EOF'
+            cd /opt/easyengine/sites/tl-showroom.equalitech.xyz/app/backend
+            git pull origin main
+            bash deploy.sh
+          EOF
