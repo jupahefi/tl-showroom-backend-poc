@@ -18,10 +18,15 @@ jobs:
         run: |
           echo "🛠️ Preparando el entorno SSH..."
           mkdir -p ~/.ssh
-          
-          echo "${{ secrets.SSH_PRIVATE_KEY_BACKEND }}" | tr -d '\r' > ~/.ssh/id_rsa
-          echo "${{ secrets.SSH_PUBLIC_KEY_BACKEND }}" | tr -d '\r' > ~/.ssh/id_rsa.pub
-          
+
+          if [[ "/opt/easyengine/sites/tl-showroom.equalitech.xyz/app/backend" == "/opt/easyengine/sites/tl-showroom.equalitech.xyz/app/backend" ]]; then
+            echo "${{ secrets.SSH_PRIVATE_KEY_BACKEND }}" | tr -d '\r' > ~/.ssh/id_rsa
+            echo "${{ secrets.SSH_PUBLIC_KEY_BACKEND }}" | tr -d '\r' > ~/.ssh/id_rsa.pub
+          else
+            echo "${{ secrets.SSH_PRIVATE_KEY_FRONTEND }}" | tr -d '\r' > ~/.ssh/id_rsa
+            echo "${{ secrets.SSH_PUBLIC_KEY_FRONTEND }}" | tr -d '\r' > ~/.ssh/id_rsa.pub
+          fi
+
           chmod 600 ~/.ssh/id_rsa
           chmod 644 ~/.ssh/id_rsa.pub
 
@@ -37,7 +42,7 @@ jobs:
                 PubKeyAcceptedAlgorithms +ssh-rsa
                 HostKeyAlgorithms +ssh-rsa
                 StrictHostKeyChecking no" > ~/.ssh/config
-          
+
           chmod 600 ~/.ssh/config
 
           echo "🔍 Validando clave SSH..."
