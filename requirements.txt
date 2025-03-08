@@ -8,4 +8,3 @@ alembic
 gunicorn
 passlib[bcrypt]  # Para hashing de contraseñas si lo necesitas
 email-validator  # Para validación de emails en modelos Pydantic
-fastapi.middleware.cors  # Habilita CORS en FastAPI
