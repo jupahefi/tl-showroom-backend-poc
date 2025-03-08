@@ -15,4 +15,4 @@ app.add_middleware(
 
 @app.get("/", response_class=JSONResponse)
 def read_root():
-    return JSONResponse(content={"message": "🚀 FastAPI funcionando correctamente con CORS habilitado!"}, media_type="application/json")
+    return JSONResponse(content={"message": "🚀 FastAPI funcionando correctamente con CORS habilitado! y un mensaje porque asi reconoces que si llegue"}, media_type="application/json")
