@@ -8,6 +8,8 @@ services:
       - postgres
     ports:
       - "8000:8000"
+    volumes:
+      - /etc/letsencrypt/live/equalitech.xyz:/etc/letsencrypt/live/equalitech.xyz:ro
     environment:
       - DATABASE_URL=postgresql://showroom_user:🔑 Ingresa contraseña de la base de datos (oculto, presiona Enter para usar el valor por defecto)@postgres:5432/showroom_db
   postgres:
