@@ -7,7 +7,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://tl-showroom.equalitech.xyz"],
+    allow_origins=["http://tl-showroom.equalitech.xyz:8000/"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
