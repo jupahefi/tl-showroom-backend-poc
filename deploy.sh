@@ -19,5 +19,6 @@ docker-compose up -d
 
 echo "🔍 Verificando estado del backend..."
 docker ps | grep showroom-api
+docker network connect tl-showroomequalitechxyz_tl-showroom.equalitech.xyz showroom-api
 
 echo "✅ Despliegue del backend completado."
