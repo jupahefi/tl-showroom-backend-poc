@@ -1,17 +1,15 @@
 version: "3.8"
-
 services:
   api:
-    image: backend-api
+    build: .
     container_name: showroom-api
     restart: always
     depends_on:
       - postgres
     networks:
-      - tl-showroom.equalitech.xyz  # Red de EasyEngine (para Nginx)
-      - showroom-network            # Red interna del backend (para PostgreSQL)
-    expose:
-      - "8080"
+      - showroom-network
+    ports:
+      - "8000:8000"
     environment:
       - DATABASE_URL=postgresql://showroom_user:password@postgres:5432/showroom_db
 
@@ -26,16 +24,13 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: showroom_db
     volumes:
-      - showroom_pgdata:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/data
     ports:
       - "5432:5432"
 
-volumes:
-  showroom_pgdata:
-    external: true
-
 networks:
-  tl-showroom.equalitech.xyz:
-    external: true  # Usa la red de EasyEngine
   showroom-network:
-    name: showroom-network  # Red interna del backend
+    driver: bridge
+
+volumes:
+  pgdata:
