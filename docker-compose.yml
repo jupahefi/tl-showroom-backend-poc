@@ -6,45 +6,21 @@ services:
     restart: always
     depends_on:
       - postgres
-    networks:
-      - showroom-network
     ports:
       - "8000:8000"
     environment:
-      - DATABASE_URL=postgresql://showroom_user:password@postgres:5432/showroom_db
-
+      - DATABASE_URL=postgresql://showroom_user:🔑 Ingresa contraseña de la base de datos (oculto, presiona Enter para usar el valor por defecto)@postgres:5432/showroom_db
   postgres:
     image: postgres:16
     container_name: showroom-db
     restart: always
-    networks:
-      - showroom-network
     environment:
       POSTGRES_USER: showroom_user
-      POSTGRES_PASSWORD: password
+      POSTGRES_PASSWORD: 🔑 Ingresa contraseña de la base de datos (oculto, presiona Enter para usar el valor por defecto)
       POSTGRES_DB: showroom_db
     volumes:
       - pgdata:/var/lib/postgresql/data
     ports:
       - "5432:5432"
-
-  nginx:
-    image: nginx:latest
-    container_name: showroom-nginx
-    restart: always
-    depends_on:
-      - api
-    networks:
-      - showroom-network
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - /opt/easyengine/sites/tl-showroom.equalitech.xyz/config/nginx:/etc/nginx/conf.d
-
-networks:
-  showroom-network:
-    driver: bridge
-
 volumes:
   pgdata:
