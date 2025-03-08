@@ -28,20 +28,6 @@ services:
     ports:
       - "5432:5432"
 
-  nginx:
-    image: nginx:latest
-    container_name: showroom-nginx
-    restart: always
-    depends_on:
-      - api
-    networks:
-      - showroom-network
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - /opt/easyengine/sites/tl-showroom.equalitech.xyz/config/nginx:/etc/nginx/conf.d
-
 networks:
   showroom-network:
     driver: bridge
