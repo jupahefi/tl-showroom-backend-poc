@@ -4,13 +4,13 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
-app.add_middleware(
+"""app.add_middleware(
     CORSMiddleware,
     allow_origins=["https://tl-showroom.equalitech.xyz"],  # Asegura que coincida con tu frontend
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
-)
+)"""
 
 @app.get("/", response_class=JSONResponse)
 def read_root():
