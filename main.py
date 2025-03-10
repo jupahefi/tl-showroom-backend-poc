@@ -36,4 +36,4 @@ app.include_router(router)
 
 @app.get("/", response_class=JSONResponse)
 def read_root():
-    return JSONResponse(content={"message": "🚀 FastAPI con SSL y Postgre lista. Energizado con Docker Compose y administrado por EasyEngine, con Docker y Nginx. Alojado en Vultr."}, media_type="application/json")
+    return JSONResponse(content={"message": "🚀 FastAPI con SSL lista."}, media_type="application/json")
