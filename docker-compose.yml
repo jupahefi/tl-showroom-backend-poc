@@ -24,7 +24,7 @@ services:
       - showroom-network
     environment:
       POSTGRES_USER: showroom_user
-      POSTGRES_PASSWORD: password
+      POSTGRES_PASSWORD: SuperSecurePass123
       POSTGRES_DB: showroom_db
     volumes:
       - pgdata:/var/lib/postgresql/data
