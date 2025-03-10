@@ -12,9 +12,11 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - DATABASE_URL=postgresql://showroom_user:🔑%20Ingresa%20contraseña%20de%20la%20base%20de%20datos%20(oculto,%20presiona%20Enter%20para%20usar%20el%20valor%20por%20defecto)@showroom-db:5432/showroom_db
+      - DATABASE_URL=${DATABASE_URL}
     volumes:
       - .:/app
+    env_file:
+      - .env  # Carga las variables desde .env
 
   postgres:
     image: postgres:16
@@ -23,13 +25,15 @@ services:
     networks:
       - showroom-network
     environment:
-      POSTGRES_USER: showroom_user
-      POSTGRES_PASSWORD: "🔑 Ingresa contraseña de la base de datos (oculto, presiona Enter para usar el valor por defecto)"
-      POSTGRES_DB: showroom_db
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
+      - POSTGRES_DB=${DB_NAME}
     volumes:
       - pgdata:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    env_file:
+      - .env  # Carga las variables desde .env
 
 networks:
   showroom-network:
