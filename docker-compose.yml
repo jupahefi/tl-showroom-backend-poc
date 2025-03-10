@@ -12,7 +12,7 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - DATABASE_URL=postgresql://showroom_user:password@postgres:5432/showroom_db
+      - DATABASE_URL=postgresql://showroom_user:SuperSecurePass123@postgres:5432/showroom_db
     volumes:
       - .:/app
 
