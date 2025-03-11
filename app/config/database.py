@@ -8,12 +8,17 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # 🔹 URL de la base de datos (debe coincidir con docker-compose.yml)
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://showroom_user:password@postgres:5432/showroom_db")
+# Use TEST_DATABASE_URL if available (for tests), otherwise use DATABASE_URL
+DATABASE_URL = os.getenv(
+    "TEST_DATABASE_URL",
+    os.getenv("DATABASE_URL", "postgresql://showroom_user:password@postgres:5432/showroom_db"),
+)
 
 # 🔹 Crear conexión con PostgreSQL
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
+
 
 # 🔹 Dependencia de sesión para FastAPI
 def get_db():

@@ -2,12 +2,14 @@ from pydantic import BaseModel, EmailStr
 from datetime import datetime
 from typing import Optional
 
+
 # 🔹 Esquema para crear un perfil
 class ProfileCreate(BaseModel):
     name: str
     email: EmailStr
     specialty: str
     linkedin: Optional[str] = None
+
 
 # 🔹 Esquema para actualizar un perfil
 class ProfileUpdate(BaseModel):
@@ -16,6 +18,7 @@ class ProfileUpdate(BaseModel):
     specialty: Optional[str] = None
     linkedin: Optional[str] = None
     status: Optional[str] = None
+
 
 # 🔹 Esquema para mostrar un perfil
 class ProfileResponse(ProfileCreate):

@@ -8,3 +8,13 @@ alembic
 gunicorn
 passlib[bcrypt]  # Para hashing de contraseñas si lo necesitas
 email-validator  # Para validación de emails en modelos Pydantic
+
+# Testing dependencies
+pytest
+pytest-asyncio
+httpx
+pytest-cov
+
+# Development tools
+flake8
+black
